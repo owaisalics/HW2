@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'movies#index'
-  #get 'movies/updatemovie'
+  get 'movies/updatemovie'
   #root 'movies#updatemovie'
   
 #  match 'post/:id' => 'posts#show', via: [:get, :post]

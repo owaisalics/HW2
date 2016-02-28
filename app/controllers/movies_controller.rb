@@ -12,13 +12,21 @@ class MoviesController < ApplicationController
 
   def index
 
-    @filtered_ratings = params[:ratings] || []
     @all_ratings= ['G', 'PG', 'PG-13', 'R']#Movie.pluck(:rating).uniq
-    if params[:ratings]
+    @filter_rat=params[:ratings]
+    if @filter_rat == nil
+      @filter_rat = @all_ratings
+    else
+      @filter_rat = params[:ratings] 
+    end
+  
+   # @all_ratings= ['G', 'PG', 'PG-13', 'R']#Movie.pluck(:rating).uniq
+#    @all_ratings = Movie.get_all_ratings
+    #if params[:ratings]
     #Movie.where("rating IN (?)", params[:ratings])
       #@movies = Movie.where(:rating => @filtered_ratings)
-      @movies= Movie.where(rating: params[:ratings] ) 
-    end
+     # @movies= Movie.where(rating: params[:ratings] ) 
+    #end
     
     @hilit="hilite"
     if params[:sort_param]
@@ -27,6 +35,7 @@ class MoviesController < ApplicationController
       params[:ratings]  ? @movies = Movie.where(rating: params[:ratings].keys ) :
                           @movies = Movie.all
     end
+    
   end
   
 
@@ -43,7 +52,10 @@ class MoviesController < ApplicationController
   def edit
     @movie = Movie.find params[:id]
   end
-
+  def updatemovie
+  
+  end
+  
   def update
     @movie = Movie.find params[:id]
     @movie.update_attributes!(movie_params)
