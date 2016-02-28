@@ -12,11 +12,21 @@ class MoviesController < ApplicationController
 
   def index
 
-    @all_ratings=Movie.pluck(:rating).uniq
+    @filtered_ratings = params[:ratings] || []
+    @all_ratings= ['G', 'PG', 'PG-13', 'R']#Movie.pluck(:rating).uniq
+    if params[:ratings]
+    #Movie.where("rating IN (?)", params[:ratings])
+      #@movies = Movie.where(:rating => @filtered_ratings)
+      @movies= Movie.where(rating: params[:ratings] ) 
+    end
     
-    
-    @movies = Movie.order(params[:sort_param])
-    
+    @hilit="hilite"
+    if params[:sort_param]
+      @movies = Movie.order(params[:sort_param])
+    else 
+      params[:ratings]  ? @movies = Movie.where(rating: params[:ratings].keys ) :
+                          @movies = Movie.all
+    end
   end
   
 
@@ -40,8 +50,7 @@ class MoviesController < ApplicationController
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
   end
-  def updatemovie
-  end
+  
   def destroy
     @movie = Movie.find(params[:id])
     @movie.destroy
